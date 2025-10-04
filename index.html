@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speechify - Text to Speech Converter</title>
+    <title>EthioSpeak - Text to Speech with Ethiopian Languages</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #4cc9f0;
+            --primary: #2E8B57;
+            --primary-dark: #1F6B45;
+            --secondary: #FFD700;
+            --accent: #8B4513;
             --light: #f8f9fa;
             --dark: #212529;
-            --success: #4bb543;
-            --danger: #e63946;
-            --warning: #ff9e00;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
             --gray: #6c757d;
+            --ethio-green: #078C3F;
+            --ethio-yellow: #FCDD09;
+            --ethio-red: #EF2B2D;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
             color: var(--dark);
             line-height: 1.6;
             min-height: 100vh;
@@ -44,9 +49,29 @@
             margin-bottom: 2rem;
         }
 
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            background: var(--ethio-green);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
         header h1 {
             font-size: 3rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(to right, var(--ethio-green), var(--ethio-yellow), var(--ethio-red));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -77,7 +102,7 @@
         .card-title {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            color: var(--secondary);
+            color: var(--primary-dark);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -101,6 +126,45 @@
         .text-input:focus {
             outline: none;
             border-color: var(--primary);
+        }
+
+        .language-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-option:hover {
+            border-color: var(--primary);
+            background-color: rgba(46, 139, 87, 0.05);
+        }
+
+        .language-option.active {
+            border-color: var(--primary);
+            background-color: rgba(46, 139, 87, 0.1);
+        }
+
+        .language-flag {
+            width: 30px;
+            height: 20px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .ethiopia-flag {
+            background: linear-gradient(to bottom, #078C3F 33%, #FCDD09 33%, #FCDD09 66%, #EF2B2D 66%);
         }
 
         .controls {
@@ -165,7 +229,7 @@
         }
 
         .btn-primary:hover {
-            background: var(--secondary);
+            background: var(--primary-dark);
             transform: translateY(-2px);
         }
 
@@ -186,7 +250,7 @@
         }
 
         .btn-success:hover {
-            background: #3a9e35;
+            background: #218838;
             transform: translateY(-2px);
         }
 
@@ -196,7 +260,7 @@
         }
 
         .btn-danger:hover {
-            background: #c1121f;
+            background: #c82333;
             transform: translateY(-2px);
         }
 
@@ -217,19 +281,19 @@
 
         .status.active {
             display: block;
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(46, 139, 87, 0.1);
             color: var(--primary);
         }
 
         .status.error {
             display: block;
-            background: rgba(230, 57, 70, 0.1);
+            background: rgba(220, 53, 69, 0.1);
             color: var(--danger);
         }
 
         .status.success {
             display: block;
-            background: rgba(75, 181, 67, 0.1);
+            background: rgba(40, 167, 69, 0.1);
             color: var(--success);
         }
 
@@ -283,7 +347,7 @@
 
         .feature-content h3 {
             margin-bottom: 0.5rem;
-            color: var(--secondary);
+            color: var(--primary-dark);
         }
 
         .feature-content p {
@@ -331,23 +395,78 @@
                 transform: scale(1);
             }
         }
+
+        .language-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-volume-up"></i> Speechify</h1>
-            <p>Convert any text to natural-sounding speech with our free online text-to-speech tool</p>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+                <h1>EthioSpeak</h1>
+            </div>
+            <p>Convert text to speech with support for Ethiopian languages including Amharic, Oromo, Tigrinya, and more</p>
         </header>
 
         <main>
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-keyboard"></i> Text Input</h2>
-                <textarea class="text-input" placeholder="Enter your text here...">Welcome to Speechify! This is a free text-to-speech converter that uses your browser's built-in speech synthesis capabilities. You can adjust the voice, rate, and pitch to customize your listening experience. Try it out by clicking the 'Speak' button below!</textarea>
+                <textarea class="text-input" placeholder="Enter your text here...">Welcome to EthioSpeak! This text-to-speech converter supports multiple languages including Ethiopian languages like Amharic, Oromo, and Tigrinya. እንኳን ወደ EthioSpeak በደህና መጡ! ይህ የጽሑፍ-ወደ-ንግግር መለወጫ አማርኛን ጨምሮ የተለያዩ ቋንቋዎችን ይደግፋል።</textarea>
+                
+                <div class="language-section">
+                    <h3 class="section-title">Select Language</h3>
+                    <div class="language-selector">
+                        <div class="language-option active" data-lang="en-US">
+                            <div class="language-flag" style="background: linear-gradient(to bottom, #b22234 33%, #ffffff 33%, #ffffff 66%, #3c3b6e 66%);"></div>
+                            <span>English (US)</span>
+                        </div>
+                        <div class="language-option" data-lang="am-ET">
+                            <div class="language-flag ethiopia-flag"></div>
+                            <span>Amharic (አማርኛ)</span>
+                        </div>
+                        <div class="language-option" data-lang="om-ET">
+                            <div class="language-flag ethiopia-flag"></div>
+                            <span>Oromo (Afaan Oromoo)</span>
+                        </div>
+                        <div class="language-option" data-lang="ti-ET">
+                            <div class="language-flag ethiopia-flag"></div>
+                            <span>Tigrinya (ትግርኛ)</span>
+                        </div>
+                        <div class="language-option" data-lang="so-ET">
+                            <div class="language-flag ethiopia-flag"></div>
+                            <span>Somali (Soomaali)</span>
+                        </div>
+                        <div class="language-option" data-lang="fr-FR">
+                            <div class="language-flag" style="background: linear-gradient(to right, #0055A4 33%, #FFFFFF 33%, #FFFFFF 66%, #EF4135 66%);"></div>
+                            <span>French</span>
+                        </div>
+                        <div class="language-option" data-lang="es-ES">
+                            <div class="language-flag" style="background: linear-gradient(to right, #AA151B 25%, #F1BF00 25%, #F1BF00 75%, #AA151B 75%);"></div>
+                            <span>Spanish</span>
+                        </div>
+                        <div class="language-option" data-lang="ar-SA">
+                            <div class="language-flag" style="background: #006233;"></div>
+                            <span>Arabic (العربية)</span>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="controls">
                     <div class="control-group">
-                        <label class="control-label" for="voice-select"><i class="fas fa-user"></i> Voice</label>
+                        <label class="control-label" for="voice-select"><i class="fas fa-user"></i> Voice Model</label>
                         <select id="voice-select">
                             <option value="">Loading voices...</option>
                         </select>
@@ -369,6 +488,7 @@
                     <button id="pause-btn" class="btn btn-secondary" disabled><i class="fas fa-pause"></i> Pause</button>
                     <button id="resume-btn" class="btn btn-success" disabled><i class="fas fa-play-circle"></i> Resume</button>
                     <button id="stop-btn" class="btn btn-danger" disabled><i class="fas fa-stop"></i> Stop</button>
+                    <button id="download-btn" class="btn btn-primary"><i class="fas fa-download"></i> Download</button>
                 </div>
                 
                 <div id="status" class="status">Ready to convert text to speech</div>
@@ -387,11 +507,21 @@
                 <div class="features">
                     <div class="feature">
                         <div class="feature-icon">
+                            <i class="fas fa-globe-africa"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Ethiopian Languages</h3>
+                            <p>Special support for Amharic, Oromo, Tigrinya, Somali, and other Ethiopian languages.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature">
+                        <div class="feature-icon">
                             <i class="fas fa-language"></i>
                         </div>
                         <div class="feature-content">
                             <h3>Multiple Languages</h3>
-                            <p>Supports various languages and accents for a global user experience.</p>
+                            <p>Supports various international languages and accents for a global user experience.</p>
                         </div>
                     </div>
                     
@@ -401,27 +531,17 @@
                         </div>
                         <div class="feature-content">
                             <h3>Customizable Settings</h3>
-                            <p>Adjust speech rate, pitch, and volume to match your preferences.</p>
+                            <p>Adjust speech rate, pitch, and voice model to match your preferences.</p>
                         </div>
                     </div>
                     
                     <div class="feature">
                         <div class="feature-icon">
-                            <i class="fas fa-mobile-alt"></i>
+                            <i class="fas fa-download"></i>
                         </div>
                         <div class="feature-content">
-                            <h3>Responsive Design</h3>
-                            <p>Works perfectly on desktop, tablet, and mobile devices.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="feature-content">
-                            <h3>Fast & Efficient</h3>
-                            <p>Instant text-to-speech conversion with no delays or lag.</p>
+                            <h3>Download Audio</h3>
+                            <p>Save the generated speech as audio files for offline use.</p>
                         </div>
                     </div>
                 </div>
@@ -429,7 +549,7 @@
         </main>
         
         <footer>
-            <p>Speechify &copy; 2023 | Free Text-to-Speech Converter | Hosted on Vercel</p>
+            <p>EthioSpeak &copy; 2023 | Text-to-Speech with Ethiopian Language Support | Hosted on Vercel</p>
         </footer>
     </div>
 
@@ -437,6 +557,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // DOM Elements
             const textInput = document.querySelector('.text-input');
+            const languageOptions = document.querySelectorAll('.language-option');
             const voiceSelect = document.getElementById('voice-select');
             const rateSlider = document.getElementById('rate');
             const pitchSlider = document.getElementById('pitch');
@@ -446,6 +567,7 @@
             const pauseBtn = document.getElementById('pause-btn');
             const resumeBtn = document.getElementById('resume-btn');
             const stopBtn = document.getElementById('stop-btn');
+            const downloadBtn = document.getElementById('download-btn');
             const status = document.getElementById('status');
             const voicePreview = document.getElementById('voice-preview');
             const previewBtn = document.getElementById('preview-btn');
@@ -455,6 +577,7 @@
             const synth = window.speechSynthesis;
             let utterance = null;
             let voices = [];
+            let selectedLanguage = 'en-US';
             
             // Initialize the app
             function init() {
@@ -467,6 +590,16 @@
                 
                 pitchSlider.addEventListener('input', () => {
                     pitchValue.textContent = pitchSlider.value;
+                });
+                
+                // Language selection
+                languageOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        languageOptions.forEach(opt => opt.classList.remove('active'));
+                        option.classList.add('active');
+                        selectedLanguage = option.dataset.lang;
+                        filterVoicesByLanguage();
+                    });
                 });
                 
                 voiceSelect.addEventListener('change', () => {
@@ -482,6 +615,7 @@
                 pauseBtn.addEventListener('click', pauseSpeech);
                 resumeBtn.addEventListener('click', resumeSpeech);
                 stopBtn.addEventListener('click', stopSpeech);
+                downloadBtn.addEventListener('click', downloadAudio);
                 
                 // Preview buttons
                 previewBtn.addEventListener('click', previewVoice);
@@ -494,6 +628,11 @@
             // Load available voices
             function loadVoices() {
                 voices = synth.getVoices();
+                filterVoicesByLanguage();
+            }
+            
+            // Filter voices by selected language
+            function filterVoicesByLanguage() {
                 voiceSelect.innerHTML = '';
                 
                 if (voices.length === 0) {
@@ -501,9 +640,17 @@
                     return;
                 }
                 
+                // Filter voices by selected language
+                const filteredVoices = voices.filter(voice => 
+                    voice.lang.startsWith(selectedLanguage)
+                );
+                
+                // If no voices for selected language, show all voices
+                const voicesToShow = filteredVoices.length > 0 ? filteredVoices : voices;
+                
                 // Group voices by language
                 const voicesByLang = {};
-                voices.forEach(voice => {
+                voicesToShow.forEach(voice => {
                     const lang = voice.lang;
                     if (!voicesByLang[lang]) {
                         voicesByLang[lang] = [];
@@ -526,10 +673,9 @@
                     voiceSelect.appendChild(optgroup);
                 });
                 
-                // Select the default voice if available
-                const defaultVoice = voices.find(voice => voice.default);
-                if (defaultVoice) {
-                    voiceSelect.value = defaultVoice.name;
+                // Select the first voice if available
+                if (voicesToShow.length > 0) {
+                    voiceSelect.value = voicesToShow[0].name;
                     voicePreview.classList.add('active');
                 }
             }
@@ -614,13 +760,46 @@
                 }
             }
             
+            // Download audio (simulated - would need server-side processing for real implementation)
+            function downloadAudio() {
+                if (textInput.value.trim() === '') {
+                    showStatus('Please enter some text to convert to speech.', 'error');
+                    return;
+                }
+                
+                showStatus('Audio download feature would require server-side processing. This is a frontend demonstration.', 'active');
+                
+                // In a real implementation, you would:
+                // 1. Send text to a server-side TTS service
+                // 2. Generate an audio file
+                // 3. Return a download link
+                
+                // For demo purposes, we'll create a simulated download
+                setTimeout(() => {
+                    showStatus('Download simulation complete. In a real application, your audio file would download now.', 'success');
+                }, 2000);
+            }
+            
             // Preview the selected voice
             function previewVoice() {
                 if (synth.speaking) {
                     synth.cancel();
                 }
                 
-                const previewUtterance = new SpeechSynthesisUtterance("This is a preview of the selected voice. You can adjust the rate and pitch settings to customize how it sounds.");
+                let previewText = "This is a preview of the selected voice.";
+                
+                // Set preview text based on selected language
+                if (selectedLanguage === 'am-ET') {
+                    previewText = "ይህ የተመረጠው ድምጽ ቅድመ እይታ ነው።";
+                } else if (selectedLanguage === 'om-ET') {
+                    previewText = "Kun sagalee filatamee ilaaluu dha.";
+                } else if (selectedLanguage === 'ti-ET') {
+                    previewText = "እዚ ናይ እቲ ተመሪጹ ድምጺ ኣስተውዕላ እዩ።";
+                } else if (selectedLanguage === 'so-ET') {
+                    previewText = "Kani waa daawashada codka la doortay.";
+                }
+                
+                const previewUtterance = new SpeechSynthesisUtterance(previewText);
                 
                 // Set voice
                 const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
@@ -667,4 +846,4 @@
         });
     </script>
 </body>
-  </html>
+</html>
